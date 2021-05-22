@@ -11,5 +11,7 @@ class GeogInfo(models.Model):
     current_sunset = models.DateField()
     current_temp = models.DecimalField(max_digits=5,decimal_places=3)
 
+    def __str__(self):
+        return self.timezone
     class Meta:
         ordering = ['GeogCode_id']
