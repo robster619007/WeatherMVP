@@ -36,7 +36,7 @@ router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('weatherapi/',include('geoCodes.urls')),
+    path('wapi/',include('geoCodes.urls')),
      path('routers/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
 ]
