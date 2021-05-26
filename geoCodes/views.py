@@ -25,7 +25,7 @@ def geoData(request):
     g.current_sunrise = datetime.datetime.fromtimestamp(float(geodata["current"]["sunrise"]))
     g.current_sunset = datetime.datetime.fromtimestamp(float(geodata["current"]["sunset"]))
     g.current_temp = geodata["current"]["temp"]
-
+    g.save()
     # if request.method == 'GET':
     #     geog = GeogInfo.objects.all()
     #     serializer = GeogInfoSerializer(geog, many=True)
