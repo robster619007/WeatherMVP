@@ -37,15 +37,15 @@ def geoData(request):
     #         return Response(serializer.data,status=status.HTTP_201_CREATED)
     #     return Response(serializer.error,status=status.HTTP_400_BAD_REQUEST)
 
-    # return JsonResponse({"Latitude":g.latitude,
-    #                     "Longitude":g.longitude,
-    #                     "TimeZone": g.timezone,
-    #                     "current_date":g.current_date,
-    #                     "current_sunrise":g.current_sunrise,
-    #                     "current_sunset":g.current_sunset,
-    #                     "current_temp":g.current_temp,
-    #                     "Saved??":"yes"
-    #                     })
+    return JsonResponse({"latitude":g.latitude,
+                        "longitude":g.longitude,
+                        "timezone": g.timezone,
+                        "current_date":g.current_date,
+                        "current_sunrise":g.current_sunrise,
+                        "current_sunset":g.current_sunset,
+                        "current_temp":g.current_temp,
+                        "saved??":"yes"
+                        })
 # @api_view(['GET'])
 # def geoInfo(request):
 #     if request.method == 'GET':
