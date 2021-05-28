@@ -9,7 +9,7 @@ from rest_framework import status
 import requests
 import datetime
 # Create your views here.
-@api_view(['GET','POST'])
+# @api_view(['GET','POST'])
 def geoData(request):
     lat = input("Enter Latitude:->")
     lon = input("Enter Longitude:->")
@@ -26,6 +26,8 @@ def geoData(request):
     g.current_sunset = datetime.datetime.fromtimestamp(float(geodata["current"]["sunset"]))
     g.current_temp = geodata["current"]["temp"]
     g.save()
+
+    # geo = GeogInfo.objects.get()
     # if request.method == 'GET':
     #     geog = GeogInfo.objects.all()
     #     serializer = GeogInfoSerializer(geog, many=True)
@@ -36,7 +38,6 @@ def geoData(request):
     #         serializer.save()
     #         return Response(serializer.data,status=status.HTTP_201_CREATED)
     #     return Response(serializer.error,status=status.HTTP_400_BAD_REQUEST)
-
     return JsonResponse({"latitude":g.latitude,
                         "longitude":g.longitude,
                         "timezone": g.timezone,

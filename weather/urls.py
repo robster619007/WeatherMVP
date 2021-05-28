@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth.models import User
+from geoCodes.models import GeogInfo
+from geoCodes.serializers import GeogInfoSerializer
 from rest_framework import routers, serializers, viewsets
 
 # Serializers define the API representation.
@@ -29,13 +31,17 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class GeogInfoViewSet(viewsets.ModelViewSet):
+    queryset = GeogInfo.objects.all()
+    serializer_class = GeogInfoSerializer
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+router.register(r'GeogInfo',GeogInfoViewSet)
 # router.register(r'weatherapi', geoData)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),#username:admin password:admin
     path('wapi/',include('geoCodes.urls')),
      path('routers/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
