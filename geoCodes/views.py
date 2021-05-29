@@ -21,8 +21,6 @@ class GeogInfoViewSet(viewsets.ViewSet):
         geog = get_object_or_404(queryset, pk=pk)
         serializer = GeogInfoSerializer(geog)
         return Response(serializer.data)  
-
-# Create your views here.
     def geoDataAdd(self,request):
         lat = input("Enter Latitude:->")
         lon = input("Enter Longitude:->")
