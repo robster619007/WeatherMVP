@@ -39,17 +39,6 @@ class GeogInfoViewSet(viewsets.ViewSet):
         g.current_sunset = datetime.datetime.fromtimestamp(float(geodata["current"]["sunset"]))
         g.current_temp = geodata["current"]["temp"]
 
-        if request.method == 'GET':
-            geog = GeogInfo.objects.all()
-            serializer = GeogInfoSerializer(geog, many=True)
-            return Response(serializer.data)
-        elif request.method == 'POST':
-            serializer = GeogInfoSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data,status=status.HTTP_201_CREATED)
-            return Response(serializer.error,status=status.HTTP_400_BAD_REQUEST)
-
     # return JsonResponse({"Latitude":g.latitude,
     #                     "Longitude":g.longitude,
     #                     "TimeZone": g.timezone,
@@ -59,9 +48,3 @@ class GeogInfoViewSet(viewsets.ViewSet):
     #                     "current_temp":g.current_temp,
     #                     "Saved??":"yes"
     #                     })
-# @api_view(['GET'])
-# def geoInfo(request):
-#     if request.method == 'GET':
-#         geo = GeogInfo.objects.all()
-#         serializer = GeogInfoSerializer(geo, many=True)
-#         return Response(serializer.data)
