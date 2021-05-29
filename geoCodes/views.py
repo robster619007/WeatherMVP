@@ -2,26 +2,42 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import GeogInfo
 from .serializers import GeogInfoSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+import django_filters.rest_framework
+# from weather.permissions import IsAdminOrIsSelf
+from rest_framework.decorators import action
 import requests
 import datetime
+
+class GeogInfoListView(generics.ListAPIView):
+    queryset = GeogInfo.objects.all()
+    serializer_class = GeogInfoSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['latitude','longitude','timezone','current_temp']
 
 class GeogInfoViewSet(viewsets.ViewSet):
     def list(self,request):
         queryset = GeogInfo.objects.all()
         serializer = GeogInfoSerializer(queryset,many=True)
+        serializer_class = GeogInfoSerializer
+        filter_backends = [DjangoFilterBackend]
+        filterset_fields = ['latitude','longitude','timezone','current_temp']
         return Response(serializer.data)
     def retrieve(self,request,pk=None):
         queryset = GeogInfo.objects.all()
         geog = get_object_or_404(queryset, pk=pk)
         serializer = GeogInfoSerializer(geog)
-        return Response(serializer.data)  
-    def geoDataAdd(self,request):
+        filter_backends = [DjangoFilterBackend]
+        filterset_fields = ['latitude','longitude','timezone','current_temp']
+        return Response(serializer.data)
+    def geoDataAdd(request):
         lat = input("Enter Latitude:->")
         lon = input("Enter Longitude:->")
         link = 'https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&exclude=hourly,daily&units=metric&appid=08734daabf83dce36eab5788b4939a4b'.format(lat,lon)
@@ -36,13 +52,13 @@ class GeogInfoViewSet(viewsets.ViewSet):
         g.current_sunrise = datetime.datetime.fromtimestamp(float(geodata["current"]["sunrise"]))
         g.current_sunset = datetime.datetime.fromtimestamp(float(geodata["current"]["sunset"]))
         g.current_temp = geodata["current"]["temp"]
-
-    # return JsonResponse({"Latitude":g.latitude,
-    #                     "Longitude":g.longitude,
-    #                     "TimeZone": g.timezone,
-    #                     "current_date":g.current_date,
-    #                     "current_sunrise":g.current_sunrise,
-    #                     "current_sunset":g.current_sunset,
-    #                     "current_temp":g.current_temp,
-    #                     "Saved??":"yes"
-    #                     })
+        g.save()
+        return JsonResponse({"Latitude":g.latitude,
+                            "Longitude":g.longitude,
+                            "TimeZone": g.timezone,
+                            "current_date":g.current_date,
+                            "current_sunrise":g.current_sunrise,
+                            "current_sunset":g.current_sunset,
+                            "current_temp":g.current_temp,
+                            "Saved??":"yes"
+                            })

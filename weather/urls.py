@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth.models import User
 from geoCodes.models import GeogInfo
-from geoCodes.views import GeogInfoViewSet
+from geoCodes.views import GeogInfoViewSet,GeogInfoListView
 from geoCodes.serializers import GeogInfoSerializer
 from rest_framework import routers, serializers, viewsets
 from rest_framework.response import Response
@@ -25,7 +25,7 @@ from rest_framework.routers import DefaultRouter
       
 # Routers provide an easy way of automatically determining the URL conf.
 router = DefaultRouter()
-router.register(r'GeogInfo',GeogInfoViewSet,basename='geog')
+router.register(r'Geog',GeogInfoViewSet,basename='geog')
 # router.register(r'weatherapi', geoData)
 
 urlpatterns = [
