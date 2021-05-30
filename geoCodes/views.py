@@ -16,11 +16,12 @@ from rest_framework.decorators import action
 import requests
 import datetime
 
-class GeogInfoListView(generics.ListAPIView):
+class GeogInfoListView(viewsets.ReadOnlyModelViewSet):
     queryset = GeogInfo.objects.all()
     serializer_class = GeogInfoSerializer
+    serializer = GeogInfoSerializer(queryset,many =True)
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['latitude','longitude','timezone','current_temp']
+    # filterset_fields = ['latitude','longitude','timezone','current_temp']
 
 class GeogInfoViewSet(viewsets.ViewSet):
     def list(self,request):
@@ -28,7 +29,7 @@ class GeogInfoViewSet(viewsets.ViewSet):
         serializer = GeogInfoSerializer(queryset,many=True)
         serializer_class = GeogInfoSerializer
         filter_backends = [DjangoFilterBackend]
-        filterset_fields = ['latitude','longitude','timezone','current_temp']
+        # filterset_fields = ['latitude','longitude','timezone','current_temp']
         return Response(serializer.data)
     def retrieve(self,request,pk=None):
         queryset = GeogInfo.objects.all()
