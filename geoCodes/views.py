@@ -15,7 +15,7 @@ import django_filters.rest_framework
 from rest_framework.decorators import action
 import requests
 import datetime
-
+# http://127.0.0.1:8000/wapi/filter
 class GeogInfoListView(viewsets.ReadOnlyModelViewSet):
     queryset = GeogInfo.objects.all()
     serializer_class = GeogInfoSerializer
@@ -23,7 +23,9 @@ class GeogInfoListView(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['latitude','longitude','timezone','current_temp']
 
+# API to be used
 class GeogInfoViewSet(viewsets.ViewSet):
+    # http://127.0.0.1:8000/Geog/
     def list(self,request):
         queryset = GeogInfo.objects.all()
         serializer = GeogInfoSerializer(queryset,many=True)
@@ -31,6 +33,7 @@ class GeogInfoViewSet(viewsets.ViewSet):
         filter_backends = [DjangoFilterBackend]
         # filterset_fields = ['latitude','longitude','timezone','current_temp']
         return Response(serializer.data)
+    # http://127.0.0.1:8000/Geog/<pk> in this case its 1,2,3
     def retrieve(self,request,pk=None):
         queryset = GeogInfo.objects.all()
         geog = get_object_or_404(queryset, pk=pk)
@@ -41,6 +44,7 @@ class GeogInfoViewSet(viewsets.ViewSet):
     # Use this function to add according to the longitude and latitude. As soon as the wapi/add url is executed
     # the terminal should show which latitude and longitude to enter. By entering the values the data from the 
     # open api according to the longitude and latitude will be used to save the data in the model.
+    # api http://127.0.0.1:8000/wapi/add
     def geoDataAdd(request):
         lat = input("Enter Latitude:->")
         lon = input("Enter Longitude:->")
