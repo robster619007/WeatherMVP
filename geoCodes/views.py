@@ -38,6 +38,9 @@ class GeogInfoViewSet(viewsets.ViewSet):
         filter_backends = [DjangoFilterBackend]
         filterset_fields = ['latitude','longitude','timezone','current_temp']
         return Response(serializer.data)
+    # Use this function to add according to the longitude and latitude. As soon as the wapi/add url is executed
+    # the terminal should show which latitude and longitude to enter. By entering the values the data from the 
+    # open api according to the longitude and latitude will be used to save the data in the model.
     def geoDataAdd(request):
         lat = input("Enter Latitude:->")
         lon = input("Enter Longitude:->")
