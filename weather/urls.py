@@ -17,32 +17,26 @@ from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth.models import User
 from geoCodes.models import GeogInfo
+from django.core.paginator import Paginator
+from geoCodes.views import GeogInfoViewSet,GeogInfoListView
 from geoCodes.serializers import GeogInfoSerializer
 from rest_framework import routers, serializers, viewsets
+from rest_framework.response import Response
+from rest_framework.routers import DefaultRouter
 
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-class GeogInfoViewSet(viewsets.ModelViewSet):
+class Geog(viewsets.ModelViewSet):
     queryset = GeogInfo.objects.all()
     serializer_class = GeogInfoSerializer
+    # pagination_class = LargeResultsSetPagination
 # Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'GeogInfo',GeogInfoViewSet)
+router = DefaultRouter()
+router.register(r'Geog',GeogInfoViewSet,basename='geog')
+router.register(r'pagination',Geog,basename='page')
 # router.register(r'weatherapi', geoData)
 
 urlpatterns = [
     path('admin/', admin.site.urls),#username:admin password:admin
     path('wapi/',include('geoCodes.urls')),
-     path('routers/', include(router.urls)),
+    path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
 ]
