@@ -17,15 +17,21 @@ from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth.models import User
 from geoCodes.models import GeogInfo
+from django.core.paginator import Paginator
 from geoCodes.views import GeogInfoViewSet,GeogInfoListView
 from geoCodes.serializers import GeogInfoSerializer
 from rest_framework import routers, serializers, viewsets
 from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter
-      
+
+class Geog(viewsets.ModelViewSet):
+    queryset = GeogInfo.objects.all()
+    serializer_class = GeogInfoSerializer
+    # pagination_class = LargeResultsSetPagination
 # Routers provide an easy way of automatically determining the URL conf.
 router = DefaultRouter()
 router.register(r'Geog',GeogInfoViewSet,basename='geog')
+router.register(r'pagination',Geog,basename='page')
 # router.register(r'weatherapi', geoData)
 
 urlpatterns = [

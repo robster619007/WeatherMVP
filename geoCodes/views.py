@@ -15,6 +15,10 @@ import django_filters.rest_framework
 from rest_framework.decorators import action
 import requests
 import datetime
+
+class Geog(viewsets.ModelViewSet):
+    queryset = GeogInfo.objects.all()
+    serializer_class = GeogInfoSerializer
 # http://127.0.0.1:8000/wapi/filter
 class GeogInfoListView(viewsets.ReadOnlyModelViewSet):
     queryset = GeogInfo.objects.all()
