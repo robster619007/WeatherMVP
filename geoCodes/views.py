@@ -13,14 +13,16 @@ from rest_framework import status
 import django_filters.rest_framework
 # from weather.permissions import IsAdminOrIsSelf
 from rest_framework.decorators import action
+import pandas as pd
 import requests
 import datetime
+import csv
 
 class Geog(viewsets.ModelViewSet):
     queryset = GeogInfo.objects.all()
     serializer_class = GeogInfoSerializer
 # http://127.0.0.1:8000/wapi/filter
-class GeogInfoListView(viewsets.ReadOnlyModelViewSet):
+class GeogInfofilter(viewsets.ReadOnlyModelViewSet):
     queryset = GeogInfo.objects.all()
     serializer_class = GeogInfoSerializer
     serializer = GeogInfoSerializer(queryset,many =True)
@@ -49,6 +51,14 @@ class GeogInfoViewSet(viewsets.ViewSet):
     # the terminal should show which latitude and longitude to enter. By entering the values the data from the 
     # open api according to the longitude and latitude will be used to save the data in the model.
     # api http://127.0.0.1:8000/wapi/add
+    def save(request):
+        response = HttpResponse(content_type = 'text/csv')
+        response['Content-Disposition'] = 'attachment; filename="GeogInfo.csv"'
+        geog = GeogInfo.objects.all()
+        writer = csv.writer(response)
+        for g in geog:
+            writer.writerow([g.latitude,g.longitude,g.timezone,g.current_date,g.current_sunrise,g.current_sunset,g.current_temp])
+        return (response)
     def geoDataAdd(request):
         lat = input("Enter Latitude:->")
         lon = input("Enter Longitude:->")
@@ -65,6 +75,18 @@ class GeogInfoViewSet(viewsets.ViewSet):
         g.current_sunset = datetime.datetime.fromtimestamp(float(geodata["current"]["sunset"]))
         g.current_temp = geodata["current"]["temp"]
         g.save()
+
+        d = geodata
+        d = {}
+        d["lat"] = g.latitude
+        d["long"] = g.longitude
+        d["tz"] = g.timezone
+        df = pd.DataFrame(list(d.items()),columns=['Longitude','Latitude','Timezone'])
+
+        df.to_csv("Weather.csv",index=False)
+
+
+
         return JsonResponse({"Latitude":g.latitude,
                             "Longitude":g.longitude,
                             "TimeZone": g.timezone,
