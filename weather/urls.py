@@ -18,7 +18,7 @@ from django.urls import path,include
 from django.contrib.auth.models import User
 from geoCodes.models import GeogInfo
 from django.core.paginator import Paginator
-from geoCodes.views import GeogInfoViewSet,GeogInfoListView
+from geoCodes.views import GeogInfoViewSet
 from geoCodes.serializers import GeogInfoSerializer
 from rest_framework import routers, serializers, viewsets
 from rest_framework.response import Response
