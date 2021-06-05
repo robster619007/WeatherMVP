@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from geoCodes.models import GeogInfo
 from django.core.paginator import Paginator
@@ -23,6 +24,7 @@ from geoCodes.serializers import GeogInfoSerializer
 from rest_framework import routers, serializers, viewsets
 from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter
+import csv
 
 class Geog(viewsets.ModelViewSet):
     queryset = GeogInfo.objects.all()
@@ -38,7 +40,7 @@ class SaveGeogInfo(viewsets.ViewSet):
         writer = csv.writer(response)
         for g in queryset:
             writer.writerow([g.latitude,g.longitude,g.timezone,g.current_date,g.current_sunrise,g.current_sunset,g.current_temp])
-        return Response(response)
+        return (response)
 router = DefaultRouter()
 router.register(r'Geog',GeogInfoViewSet,basename='geog')
 router.register(r'pagination',Geog,basename='page')
@@ -47,6 +49,7 @@ router.register(r'save',SaveGeogInfo,basename='save')
 
 urlpatterns = [
     path('admin/', admin.site.urls),#username:admin password:admin
+    path('save/', SaveGeogInfo.save,name='save'),
     path('wapi/',include('geoCodes.urls')),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
