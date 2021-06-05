@@ -30,16 +30,6 @@ class GeogInfofilter(viewsets.ReadOnlyModelViewSet):
     # filterset_fields = ['latitude','longitude','timezone','current_temp']
 
 # API to be used
-class SaveGeogInfo(viewsets.ViewSet):
-    def save(request):
-        response = HttpResponse(content_type = 'text/csv')
-        response['Content-Disposition'] = 'attachment; filename="GeogInfo.csv"'
-        queryset = GeogInfo.objects.all()
-        serializer_class = GeogInfoSerializer
-        writer = csv.writer(response)
-        for g in queryset:
-            writer.writerow([g.latitude,g.longitude,g.timezone,g.current_date,g.current_sunrise,g.current_sunset,g.current_temp])
-        return Response(response)
 class GeogInfoViewSet(viewsets.ViewSet):
     # http://127.0.0.1:8000/Geog/
     def list(self,request):
