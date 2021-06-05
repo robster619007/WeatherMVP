@@ -29,9 +29,20 @@ class Geog(viewsets.ModelViewSet):
     serializer_class = GeogInfoSerializer
     # pagination_class = LargeResultsSetPagination
 # Routers provide an easy way of automatically determining the URL conf.
+class SaveGeogInfo(viewsets.ViewSet):
+    def save(request):
+        response = HttpResponse(content_type = 'text/csv')
+        response['Content-Disposition'] = 'attachment; filename="GeogInfo.csv"'
+        queryset = GeogInfo.objects.all()
+        serializer_class = GeogInfoSerializer
+        writer = csv.writer(response)
+        for g in queryset:
+            writer.writerow([g.latitude,g.longitude,g.timezone,g.current_date,g.current_sunrise,g.current_sunset,g.current_temp])
+        return Response(response)
 router = DefaultRouter()
 router.register(r'Geog',GeogInfoViewSet,basename='geog')
 router.register(r'pagination',Geog,basename='page')
+router.register(r'save',SaveGeogInfo,basename='save')
 # router.register(r'weatherapi', geoData)
 
 urlpatterns = [
